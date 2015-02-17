@@ -1,5 +1,3 @@
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/airbnb/javascript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
 # The App Business JavaScript Style
 
 Forked from Airbnb's Javascript Styleguide, with a few tweaks.
