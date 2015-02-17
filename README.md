@@ -1,8 +1,8 @@
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/airbnb/javascript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# Airbnb JavaScript Style Guide() {
+# The App Business JavaScript Style
 
-*A mostly reasonable approach to JavaScript*
+Forked from Airbnb's Javascript Styleguide, with a few tweaks.
 
 
 ## Table of Contents
@@ -86,7 +86,7 @@
     var item = {};
     ```
 
-  - Don't use [reserved words](http://es5.github.io/#x7.6.1) as keys. It won't work in IE8. [More info](https://github.com/airbnb/javascript/issues/61).
+  - If the project targets IE8 don't use [reserved words](http://es5.github.io/#x7.6.1) as keys. Otherwise is fine.
 
     ```javascript
     // bad
@@ -99,25 +99,6 @@
     var superman = {
       defaults: { clark: 'kent' },
       hidden: true
-    };
-    ```
-
-  - Use readable synonyms in place of reserved words.
-
-    ```javascript
-    // bad
-    var superman = {
-      class: 'alien'
-    };
-
-    // bad
-    var superman = {
-      klass: 'alien'
-    };
-
-    // good
-    var superman = {
-      type: 'alien'
     };
     ```
 
@@ -211,50 +192,6 @@
     var errorMessage = 'This is a super long error that was thrown because ' +
       'of Batman. When you stop to think about how Batman had anything to do ' +
       'with this, you would get nowhere fast.';
-    ```
-
-  - When programmatically building up a string, use Array#join instead of string concatenation. Mostly for IE: [jsPerf](http://jsperf.com/string-vs-array-concat/2).
-
-    ```javascript
-    var items;
-    var messages;
-    var length;
-    var i;
-
-    messages = [{
-      state: 'success',
-      message: 'This one worked.'
-    }, {
-      state: 'success',
-      message: 'This one worked as well.'
-    }, {
-      state: 'error',
-      message: 'This one did not work.'
-    }];
-
-    length = messages.length;
-
-    // bad
-    function inbox(messages) {
-      items = '<ul>';
-
-      for (i = 0; i < length; i++) {
-        items += '<li>' + messages[i].message + '</li>';
-      }
-
-      return items + '</ul>';
-    }
-
-    // good
-    function inbox(messages) {
-      items = [];
-
-      for (i = 0; i < length; i++) {
-        items[i] = messages[i].message;
-      }
-
-      return '<ul><li>' + items.join('</li><li>') + '</li></ul>';
-    }
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -356,7 +293,16 @@
 
 ## Variables
 
-  - Always use `var` to declare variables. Not doing so will result in global variables. We want to avoid polluting the global namespace. Captain Planet warned us of that.
+  - If you're using a ES6 transpiler, prefer `let` over `var`
+
+    ```javascript
+    // bad
+    var superPower = new SuperPower();
+
+    // good
+    let superPower = new SuperPower();
+
+  - Always use `let` or `var` to declare variables. Not doing so will result in global variables. We want to avoid polluting the global namespace. Captain Planet warned us of that.
 
     ```javascript
     // bad
@@ -366,10 +312,10 @@
     var superPower = new SuperPower();
     ```
 
-  - Use one `var` declaration per variable.
+  - Use one `let`, `var` declaration per variable.
     It's easier to add new variable declarations this way, and you never have
     to worry about swapping out a `;` for a `,` or introducing punctuation-only
-    diffs. 
+    diffs.
 
     ```javascript
     // bad
@@ -642,37 +588,8 @@
 
 ## Comments
 
-  - Use `/** ... */` for multiline comments. Include a description, specify types and values for all parameters and return values.
-
-    ```javascript
-    // bad
-    // make() returns a new element
-    // based on the passed in tag name
-    //
-    // @param {String} tag
-    // @return {Element} element
-    function make(tag) {
-
-      // ...stuff...
-
-      return element;
-    }
-
-    // good
-    /**
-     * make() returns a new element
-     * based on the passed in tag name
-     *
-     * @param {String} tag
-     * @return {Element} element
-     */
-    function make(tag) {
-
-      // ...stuff...
-
-      return element;
-    }
-    ```
+  - You can use `/** */` or `//` for multiline comments, no enforcement here, but whatever you
+   choose you have to be consistent: Do not mix them in the same file.
 
   - Use `//` for single line comments. Place single line comments on a newline above the subject of the comment. Put an empty line before the comment.
 
@@ -735,7 +652,7 @@
 
 ## Whitespace
 
-  - Use soft tabs set to 2 spaces.
+  - Use soft tabs set to 4 spaces.
 
     ```javascript
     // bad
@@ -1153,6 +1070,9 @@
 ## Accessors
 
   - Accessor functions for properties are not required.
+
+  - Using ES5 getter/setters is allowed.
+
   - If you do make accessor functions use getVal() and setVal('hello').
 
     ```javascript
