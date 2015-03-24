@@ -28,13 +28,9 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
   1. [jQuery](#jquery)
   1. [ECMAScript 5 Compatibility](#ecmascript-5-compatibility)
   1. [Testing](#testing)
+  1. [Unit Testing](#unit-testing)
   1. [Performance](#performance)
   1. [Resources](#resources)
-  1. [In the Wild](#in-the-wild)
-  1. [Translation](#translation)
-  1. [The JavaScript Style Guide Guide](#the-javascript-style-guide-guide)
-  1. [Chat With Us About Javascript](#chat-with-us-about-javascript)
-  1. [Contributors](#contributors)
   1. [License](#license)
 
 ## Types
@@ -173,6 +169,7 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
     var fullName = 'Bob ' + this.lastName;
     ```
 
+  - It doesn’t make a difference when using double quotes but it helps to be consistent.
   - Strings longer than 80 characters should be written across multiple lines using string concatenation.
   - Note: If overused, long strings with concatenation could impact performance. [jsPerf](http://jsperf.com/ya-string-concat) & [Discussion](https://github.com/airbnb/javascript/issues/40).
 
@@ -310,27 +307,20 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
     var superPower = new SuperPower();
     ```
 
-  - Use one `let`, `var` declaration per variable.
-    It's easier to add new variable declarations this way, and you never have
-    to worry about swapping out a `;` for a `,` or introducing punctuation-only
-    diffs.
+  - Use one `let`, `var` declaration for multiple variables and declare each 
+    variable on a new line. For readability, keep the longest variable names
+    at the top.
 
     ```javascript
     // bad
-    var items = getItems(),
-        goSportsTeam = true,
-        dragonball = 'z';
-
-    // bad
-    // (compare to above, and try to spot the mistake)
-    var items = getItems(),
-        goSportsTeam = true;
-        dragonball = 'z';
+    var items = getItems();
+    var dragonball = 'z';
+    var goSportsTeam = true;
 
     // good
-    var items = getItems();
-    var goSportsTeam = true;
-    var dragonball = 'z';
+    var goSportsTeam = true,
+        dragonball = 'z',
+        items = getItems();
     ```
 
   - Declare unassigned variables last. This is helpful when later on you might need to assign a variable depending on one of the previous assigned variables.
@@ -349,11 +339,11 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
     var len;
 
     // good
-    var items = getItems();
-    var goSportsTeam = true;
-    var dragonball;
-    var length;
-    var i;
+    var items = getItems(),
+        goSportsTeam = true,
+        dragonball,
+        length,
+        i;
     ```
 
   - Assign variables at the top of their scope. This helps avoid issues with variable declaration and assignment hoisting related issues.
@@ -586,6 +576,22 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
 
 ## Comments
 
+  - Avoid writing unnecessary comments. Variables, methods and functions should be named in
+    a descriptive manner.
+
+  - Clear and expressive code with few comments is far superior to cluttered and complex
+    code with lots of comments. Rather than spend your time writing the comments that explain
+    the messy code, spend it writing cleaner code.
+
+  ```javascript
+  // bad
+  // Check to see if the user has admin rights
+  if (user.admin)
+
+  // good
+  if (user.hasAdminRights)
+  ```
+
   - You can use `/** */` or `//` for multiline comments, no enforcement here, but whatever you
    choose you have to be consistent: Do not mix them in the same file.
 
@@ -645,12 +651,22 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
     }
   ```
 
+  - It only takes a few seconds of thought to explain most of your intent in code. In many
+    cases it's simply a matter of creating a function that says the same thing as the
+    comment you want to write.
+
+    Some comments are necessary or beneficial, however the only good comment is the comment you
+    found a way not to write.
+
 **[⬆ back to top](#table-of-contents)**
 
 
 ## Whitespace
 
-  - Use soft tabs set to 4 spaces.
+  - Use liberal spacing for improved human readability. The minification process creates a file
+  that is opmimised for browsers to read and process.
+
+  - Indent using 2 spaces. Never indent with tabs.
 
     ```javascript
     // bad
@@ -840,7 +856,7 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
 
 ## Semicolons
 
-  - **Yup.**
+  - **Yup.** Never rely on ASL
 
     ```javascript
     // bad
@@ -1007,9 +1023,14 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
     });
     ```
 
-  - Use a leading underscore `_` when naming private properties.
+  - Use a leading underscore `_` when naming private properties but give the variable a meaningful name.
 
     ```javascript
+
+    //bad
+    var _this = this;
+    var self = this;
+
     // bad
     this.__firstName__ = 'Panda';
     this.firstName_ = 'Panda';
@@ -1039,9 +1060,9 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
 
     // good
     function() {
-      var _this = this;
+      var _firstName = this;
       return function() {
-        console.log(_this);
+        console.log(_firstName);
       };
     }
     ```
@@ -1348,6 +1369,12 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
     }
     ```
 
+## Unit Testing
+
+  - Use Karma and Jasmine for TDD style testing. If possible, each project should
+    be configured for some sort of CI environment and running unit tests with each
+    commit.
+
 **[⬆ back to top](#table-of-contents)**
 
 
@@ -1429,80 +1456,6 @@ Forked from Airbnb's Javascript Styleguide, with a few tweaks.
   - [nettuts](http://net.tutsplus.com/?s=javascript)
 
 **[⬆ back to top](#table-of-contents)**
-
-## In the Wild
-
-  This is a list of organizations that are using this style guide. Send us a pull request or open an issue and we'll add you to the list.
-
-  - **Aan Zee**: [AanZee/javascript](https://github.com/AanZee/javascript)
-  - **Airbnb**: [airbnb/javascript](https://github.com/airbnb/javascript)
-  - **American Insitutes for Research**: [AIRAST/javascript](https://github.com/AIRAST/javascript)
-  - **Apartmint**: [apartmint/javascript](https://github.com/apartmint/javascript)
-  - **Avalara**: [avalara/javascript](https://github.com/avalara/javascript)
-  - **Compass Learning**: [compasslearning/javascript-style-guide](https://github.com/compasslearning/javascript-style-guide)
-  - **DailyMotion**: [dailymotion/javascript](https://github.com/dailymotion/javascript)
-  - **Digitpaint** [digitpaint/javascript](https://github.com/digitpaint/javascript)
-  - **Evernote**: [evernote/javascript-style-guide](https://github.com/evernote/javascript-style-guide)
-  - **ExactTarget**: [ExactTarget/javascript](https://github.com/ExactTarget/javascript)
-  - **Gawker Media**: [gawkermedia/javascript](https://github.com/gawkermedia/javascript)
-  - **GeneralElectric**: [GeneralElectric/javascript](https://github.com/GeneralElectric/javascript)
-  - **GoodData**: [gooddata/gdc-js-style](https://github.com/gooddata/gdc-js-style)
-  - **Grooveshark**: [grooveshark/javascript](https://github.com/grooveshark/javascript)
-  - **How About We**: [howaboutwe/javascript](https://github.com/howaboutwe/javascript)
-  - **InfoJobs**: [InfoJobs/JavaScript-Style-Guide](https://github.com/InfoJobs/JavaScript-Style-Guide)
-  - **Intent Media**: [intentmedia/javascript](https://github.com/intentmedia/javascript)
-  - **Kinetica Solutions**: [kinetica/javascript](https://github.com/kinetica/javascript)
-  - **Mighty Spring**: [mightyspring/javascript](https://github.com/mightyspring/javascript)
-  - **MinnPost**: [MinnPost/javascript](https://github.com/MinnPost/javascript)
-  - **ModCloth**: [modcloth/javascript](https://github.com/modcloth/javascript)
-  - **Money Advice Service**: [moneyadviceservice/javascript](https://github.com/moneyadviceservice/javascript)
-  - **Muber**: [muber/javascript](https://github.com/muber/javascript)
-  - **National Geographic**: [natgeo/javascript](https://github.com/natgeo/javascript)
-  - **National Park Service**: [nationalparkservice/javascript](https://github.com/nationalparkservice/javascript)
-  - **Orion Health**: [orionhealth/javascript](https://github.com/orionhealth/javascript)
-  - **Peerby**: [Peerby/javascript](https://github.com/Peerby/javascript)
-  - **Razorfish**: [razorfish/javascript-style-guide](https://github.com/razorfish/javascript-style-guide)
-  - **reddit**: [reddit/styleguide/javascript](https://github.com/reddit/styleguide/tree/master/javascript)
-  - **REI**: [reidev/js-style-guide](https://github.com/reidev/js-style-guide)
-  - **Ripple**: [ripple/javascript-style-guide](https://github.com/ripple/javascript-style-guide)
-  - **SeekingAlpha**: [seekingalpha/javascript-style-guide](https://github.com/seekingalpha/javascript-style-guide)
-  - **Shutterfly**: [shutterfly/javascript](https://github.com/shutterfly/javascript)
-  - **StudentSphere**: [studentsphere/javascript](https://github.com/studentsphere/javascript)
-  - **Target**: [target/javascript](https://github.com/target/javascript)
-  - **TheLadders**: [TheLadders/javascript](https://github.com/TheLadders/javascript)
-  - **Userify**: [userify/javascript](https://github.com/userify/javascript)
-  - **VoxFeed**: [VoxFeed/javascript-style-guide](https://github.com/VoxFeed/javascript-style-guide)
-  - **Weggo**: [Weggo/javascript](https://github.com/Weggo/javascript)
-  - **Zillow**: [zillow/javascript](https://github.com/zillow/javascript)
-  - **ZocDoc**: [ZocDoc/javascript](https://github.com/ZocDoc/javascript)
-
-## Translation
-
-  This style guide is also available in other languages:
-
-  - ![de](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Germany.png) **German**: [timofurrer/javascript-style-guide](https://github.com/timofurrer/javascript-style-guide)
-  - ![jp](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Japan.png) **Japanese**: [mitsuruog/javacript-style-guide](https://github.com/mitsuruog/javacript-style-guide)
-  - ![br](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Brazil.png) **Brazilian Portuguese**: [armoucar/javascript-style-guide](https://github.com/armoucar/javascript-style-guide)
-  - ![cn](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/China.png) **Chinese**: [adamlu/javascript-style-guide](https://github.com/adamlu/javascript-style-guide)
-  - ![es](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Spain.png) **Spanish**: [paolocarrasco/javascript-style-guide](https://github.com/paolocarrasco/javascript-style-guide)
-  - ![kr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/South-Korea.png) **Korean**: [tipjs/javascript-style-guide](https://github.com/tipjs/javascript-style-guide)
-  - ![fr](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/France.png) **French**: [nmussy/javascript-style-guide](https://github.com/nmussy/javascript-style-guide)
-  - ![ru](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Russia.png) **Russian**: [uprock/javascript](https://github.com/uprock/javascript)
-  - ![bg](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Bulgaria.png) **Bulgarian**: [borislavvv/javascript](https://github.com/borislavvv/javascript)
-  - ![ca](https://raw.githubusercontent.com/fpmweb/javascript-style-guide/master/img/catala.png) **Catalan**: [fpmweb/javascript-style-guide](https://github.com/fpmweb/javascript-style-guide)
-  - ![pl](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/Poland.png) **Polish**: [mjurczyk/javascript](https://github.com/mjurczyk/javascript)
-
-## The JavaScript Style Guide Guide
-
-  - [Reference](https://github.com/airbnb/javascript/wiki/The-JavaScript-Style-Guide-Guide)
-
-## Chat With Us About JavaScript
-
-  - Find us on [gitter](https://gitter.im/airbnb/javascript).
-
-## Contributors
-
-  - [View Contributors](https://github.com/airbnb/javascript/graphs/contributors)
 
 
 ## License
